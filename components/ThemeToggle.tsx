@@ -2,74 +2,154 @@
 
 import { useEffect, useState } from "react";
 
-const RIPPLE_COLORS = {
-  light: "#f7f3ec",
-  dark: "#16140f",
-};
-
 export default function ThemeToggle() {
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const stored = localStorage.getItem("theme") as "dark" | "light" | null;
+    const stored = localStorage.getItem("theme") as
+      | "dark"
+      | "light"
+      | null;
+
     const initial =
       stored ||
       (window.matchMedia("(prefers-color-scheme: light)").matches
         ? "light"
         : "dark");
+
+    document.documentElement.setAttribute(
+      "data-theme",
+      initial
+    );
+
     setTheme(initial);
-    document.documentElement.setAttribute("data-theme", initial);
     setMounted(true);
   }, []);
 
-  const toggleTheme = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const next = theme === "dark" ? "light" : "dark";
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = rect.left + rect.width / 2;
-    const y = rect.top + rect.height / 2;
+  const toggleTheme = (
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    const next =
+      theme === "dark"
+        ? "light"
+        : "dark";
 
-    // size the ripple to cover the whole viewport from the click point
-    const maxDim =
-      Math.max(window.innerWidth, window.innerHeight) * 2.2;
+    const x = window.innerWidth / 2;
+    const y = window.innerHeight / 2;
 
-    const ripple = document.createElement("div");
-    ripple.className = "theme-ripple";
-    ripple.style.left = `${x}px`;
-    ripple.style.top = `${y}px`;
-    ripple.style.width = `${maxDim}px`;
-    ripple.style.height = `${maxDim}px`;
-    ripple.style.background = RIPPLE_COLORS[next];
-    document.body.appendChild(ripple);
+
+
+    const ink =
+      document.createElement("div");
+
+    ink.className =
+      `ink-transition ${next}`;
+
+    ink.style.left = `${x}px`;
+    ink.style.top = `${y}px`;
+
+
+    document.body.appendChild(ink);
 
     requestAnimationFrame(() => {
-      ripple.classList.add("animating");
+      ink.classList.add("animate");
     });
 
-    // swap the theme partway through the wipe so the reveal feels intentional
     setTimeout(() => {
-      document.documentElement.setAttribute("data-theme", next);
-      localStorage.setItem("theme", next);
-      setTheme(next);
-    }, 250);
+      document.documentElement.setAttribute(
+        "data-theme",
+        next
+      );
 
-    ripple.addEventListener("animationend", () => {
-      ripple.remove();
-    });
+      localStorage.setItem(
+        "theme",
+        next
+      );
+
+      setTheme(next);
+    }, 500);
+
+    ink.addEventListener(
+      "animationend",
+      () => {
+        ink.remove();
+      }
+    );
   };
 
   if (!mounted) {
-    return <div className="w-8 h-8" aria-hidden="true" />;
+    return (
+      <div
+        className="w-8 h-8"
+        aria-hidden="true"
+      />
+    );
   }
 
   return (
     <button
       onClick={toggleTheme}
-      aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-      className="w-8 h-8 flex items-center justify-center rounded-full text-sm transition-transform hover:scale-110 active:scale-90"
-      style={{ border: "1px solid var(--rule)", color: "var(--text)" }}
+      aria-label={`Switch to ${
+        theme === "dark"
+          ? "light"
+          : "dark"
+      } mode`}
+      className="w-8 h-8 flex items-center justify-center rounded-full transition-transform hover:scale-110 active:scale-95"
+      style={{
+        border:
+          "1px solid var(--rule)",
+        color:
+          "var(--text)"
+      }}
     >
-      {theme === "dark" ? "☾" : "☀"}
+      <svg
+        className={`theme-icon ${
+          theme === "dark"
+            ? "moon"
+            : "sun"
+        }`}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+      >
+        {theme === "dark" ? (
+          <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+        ) : (
+          <>
+            <circle
+              cx="12"
+              cy="12"
+              r="5"
+            />
+            <line
+              x1="12"
+              y1="1"
+              x2="12"
+              y2="3"
+            />
+            <line
+              x1="12"
+              y1="21"
+              x2="12"
+              y2="23"
+            />
+            <line
+              x1="1"
+              y1="12"
+              x2="3"
+              y2="12"
+            />
+            <line
+              x1="21"
+              y1="12"
+              x2="23"
+              y2="12"
+            />
+          </>
+        )}
+      </svg>
     </button>
   );
 }
