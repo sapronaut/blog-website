@@ -1,314 +1,203 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-html,
-body {
-  overflow-x: hidden;
-}
+
 :root {
-  --bg: #111315;
-  --surface: #17191c;
-  --surface-hover: #1d2024;
+--bg: #111315;
+--surface: #17191c;
+--surface-hover: #1d2024;
 
-  --text: #e8e6e3;
-  --text-dim: #a4abb4;
+--text: #e8e6e3;
+--text-dim: #a4abb4;
 
-  --accent: #f4b942;
+--accent: #f4b942;
 
-  --rule: rgba(255, 255, 255, 0.08);
+--rule: rgba(255,255,255,0.08);
 }
 
 [data-theme="light"] {
-  --bg: #f8f5ee;
-  --surface: #f2eee6;
-  --surface-hover: #ece6dc;
+--bg: #f8f5ee;
+--surface: #f2eee6;
+--surface-hover: #ece6dc;
 
-  --text: #1f2937;
-  --text-dim: #6b7280;
+--text: #1f2937;
+--text-dim: #6b7280;
 
-  --accent: #d9911c;
+--accent: #d9911c;
 
-  --rule: rgba(0, 0, 0, 0.08);
+--rule: rgba(0,0,0,0.08);
 }
 
 * {
   box-sizing: border-box;
+  }
+
+html,
+body {
+overflow-x: hidden;
 }
 
 html {
-  background: var(--bg);
-  scroll-behavior: smooth;
+background: var(--bg);
+scroll-behavior: smooth;
 }
 
 body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
+margin: 0;
+background: var(--bg);
+color: var(--text);
 
-  font-family:
-    "JetBrains Mono",
-    ui-monospace,
-    "SF Mono",
-    Menlo,
-    Consolas,
-    monospace;
+font-family:
+"JetBrains Mono",
+ui-monospace,
+"SF Mono",
+Menlo,
+Consolas,
+monospace;
 
-  line-height: 1.7;
+line-height: 1.7;
 
-  transition:
-    background-color 700ms ease,
-    color 700ms ease;
+transition:
+background-color 800ms cubic-bezier(.22,1,.36,1),
+color 800ms cubic-bezier(.22,1,.36,1);
 }
 
 a {
-  color: var(--accent);
-  text-decoration: none;
-
-  transition:
-    opacity .2s ease,
-    color .2s ease;
+color: var(--accent);
+text-decoration: none;
 }
 
 a:hover {
-  opacity: .85;
-  text-decoration: underline;
+opacity: .8;
+text-decoration: underline;
 }
 
 a:focus-visible,
 button:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
+outline: 2px solid var(--accent);
+outline-offset: 3px;
 }
-
-/* =========================
-   INK SPREAD TRANSITION
-========================= */
-
-.ink-transition {
-  position: fixed;
-  left: 50%;
-  top: 50%;
-
-  width: 120px;
-  height: 120px;
-
-  pointer-events: none;
-  z-index: 9999;
-
-  transform:
-    translate(-50%, -50%)
-    scale(0);
-
-  opacity: 1;
-
-  filter: blur(10px);
-}
-
-.ink-transition.dark {
-  background: #111315;
-}
-
-.ink-transition.light {
-  background: #f8f5ee;
-}
-
-.ink-transition.animate {
-  animation: inkBleed 1100ms
-    cubic-bezier(.22,1,.36,1)
-    forwards;
-}
-
-@keyframes inkBleed {
-
-  0% {
-    transform:
-      translate(-50%, -50%)
-      scale(0);
-
-    border-radius:
-      48% 52% 44% 56%;
-  }
-
-  20% {
-    border-radius:
-      62% 38% 55% 45%;
-  }
-
-  40% {
-    border-radius:
-      41% 59% 38% 62%;
-  }
-
-  60% {
-    border-radius:
-      57% 43% 63% 37%;
-  }
-
-  100% {
-    transform:
-      translate(-50%, -50%)
-      scale(35);
-
-    border-radius:
-      50% 50% 50% 50%;
-  }
-}
-.ink-transition.light {
-  background: #f8f5ee;
-}
-
-.ink-transition.dark {
-  background: #111315;
-}
-
-.ink-transition.animate {
-  animation:
-    inkSpread 900ms
-    cubic-bezier(.22,1,.36,1)
-    forwards;
-}
-
-@keyframes inkSpread {
-  0% {
-    transform:
-      translate(-50%, -50%)
-      scale(0);
-
-    border-radius: 45%;
-  }
-
-  25% {
-    border-radius: 55% 45% 60% 40%;
-  }
-
-  50% {
-    border-radius: 40% 60% 50% 55%;
-  }
-
-  75% {
-    border-radius: 60% 50% 45% 55%;
-  }
-
-  100% {
-    transform:
-      translate(-50%, -50%)
-      scale(1);
-
-    border-radius: 50%;
-  }
-}
-
-/* =========================
-   THEME ICON
-========================= */
 
 .theme-icon {
-  width: 20px;
-  height: 20px;
+width: 20px;
+height: 20px;
 
-  transition:
-    transform 700ms cubic-bezier(.22,1,.36,1),
-    opacity 300ms ease;
+transition:
+transform 700ms cubic-bezier(.22,1,.36,1),
+opacity 300ms ease;
 }
 
 .theme-icon.sun {
-  transform:
-    rotate(180deg)
-    scale(1);
+transform: rotate(180deg);
 }
 
 .theme-icon.moon {
-  transform:
-    rotate(0deg)
-    scale(1);
+transform: rotate(0deg);
 }
 
-/* =========================
-   PROSE
-========================= */
+.pen-transition {
+position: fixed;
+inset: 0;
+
+z-index: 9999;
+pointer-events: none;
+overflow: hidden;
+}
+
+.pen-transition::before {
+content: "";
+
+position: absolute;
+top: 0;
+left: -120%;
+
+width: 120%;
+height: 100%;
+
+background: var(--pen-color);
+
+transform: skewX(-12deg);
+
+border-top-right-radius: 40px;
+border-bottom-right-radius: 40px;
+
+box-shadow:
+0 0 60px rgba(0,0,0,.15);
+}
+
+.pen-transition.animate::before {
+animation:
+penSweep 900ms
+cubic-bezier(.22,1,.36,1)
+forwards;
+}
+
+@keyframes penSweep {
+from {
+left: -120%;
+}
+
+to {
+left: 120%;
+}
+}
 
 .prose-content h1,
 .prose-content h2,
 .prose-content h3 {
-  margin-top: 2em;
-  margin-bottom: 0.6em;
+margin-top: 2em;
+margin-bottom: 0.6em;
 
-  font-weight: 600;
-  letter-spacing: -0.01em;
-
-  color: var(--text);
+font-weight: 600;
+letter-spacing: -0.01em;
 }
 
 .prose-content p {
-  margin-bottom: 1.2em;
+margin-bottom: 1.2em;
 }
 
 .prose-content ul,
 .prose-content ol {
-  padding-left: 1.5rem;
-  margin-bottom: 1.2em;
-}
-
-.prose-content li {
-  margin-bottom: 0.4em;
+padding-left: 1.5rem;
+margin-bottom: 1.2em;
 }
 
 .prose-content blockquote {
-  margin: 1.5em 0;
-  padding-left: 1em;
-
-  border-left: 2px solid var(--accent);
-
-  color: var(--text-dim);
-  font-style: italic;
+border-left: 2px solid var(--accent);
+padding-left: 1rem;
+color: var(--text-dim);
+font-style: italic;
 }
 
 .prose-content code {
-  background: var(--surface);
-
-  padding: .15em .35em;
-  border-radius: 4px;
-
-  font-size: .9em;
+background: var(--surface);
+padding: .15em .35em;
+border-radius: 4px;
 }
 
 .prose-content pre {
-  background: var(--surface);
-
-  border: 1px solid var(--rule);
-  border-radius: 8px;
-
-  padding: 1rem;
-  overflow-x: auto;
-
-  margin: 1.5rem 0;
+background: var(--surface);
+border: 1px solid var(--rule);
+border-radius: 8px;
+padding: 1rem;
+overflow-x: auto;
 }
 
 .prose-content pre code {
-  background: transparent;
-  padding: 0;
+background: transparent;
+padding: 0;
 }
 
 .prose-content img {
-  max-width: 100%;
-  border-radius: 8px;
-
-  margin: 2rem 0;
+max-width: 100%;
+border-radius: 8px;
 }
-
-.prose-content a {
-  text-underline-offset: 3px;
-}
-
-/* =========================
-   ACCESSIBILITY
-========================= */
 
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation: none !important;
-    transition: none !important;
-  }
+*,
+*::before,
+*::after {
+animation: none !important;
+transition: none !important;
+}
 }
