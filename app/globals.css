@@ -1,0 +1,142 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #16140f;
+  --bg-raised: #1d1a14;
+  --text: #e8e3d8;
+  --text-dim: #8a8478;
+  --accent: #d98c3f;
+  --rule: #322e25;
+}
+
+[data-theme="light"] {
+  --bg: #f7f3ec;
+  --bg-raised: #ece5d8;
+  --text: #2b271f;
+  --text-dim: #8a8073;
+  --accent: #c1602e;
+  --rule: #ddd3c4;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bg);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  line-height: 1.7;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Ripple/wipe transition overlay */
+.theme-ripple {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+}
+
+.theme-ripple.animating {
+  animation: ripple-expand 0.6s ease-out forwards;
+}
+
+@keyframes ripple-expand {
+  from {
+    transform: translate(-50%, -50%) scale(0);
+  }
+  to {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-ripple.animating {
+    animation: none;
+  }
+}
+
+.prose-content h1,
+.prose-content h2,
+.prose-content h3 {
+  margin-top: 2em;
+  margin-bottom: 0.6em;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.prose-content p {
+  margin-bottom: 1.2em;
+  color: var(--text);
+}
+
+.prose-content pre {
+  background: var(--bg-raised);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 1em;
+  overflow-x: auto;
+  font-size: 0.9em;
+}
+
+.prose-content code {
+  background: var(--bg-raised);
+  padding: 0.15em 0.35em;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+.prose-content pre code {
+  background: none;
+  padding: 0;
+}
+
+.prose-content blockquote {
+  border-left: 2px solid var(--accent);
+  padding-left: 1em;
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+.prose-content ul,
+.prose-content ol {
+  padding-left: 1.4em;
+  margin-bottom: 1.2em;
+}
+
+.prose-content img {
+  max-width: 100%;
+  border-radius: 4px;
+  margin: 1.5em 0;
+}
+
+.prose-content a {
+  text-underline-offset: 3px;
+}
