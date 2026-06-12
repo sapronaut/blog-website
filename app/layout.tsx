@@ -4,31 +4,52 @@ import Nav from "@/components/Nav";
 
 export const metadata: Metadata = {
   title: "saptarshi",
-  description: "writings, research, half-finished thoughts",
+  description:
+    "writings, research, half-finished thoughts",
 };
 
 const noFlashScript = `
-  (function() {
-    try {
-      var stored = localStorage.getItem('theme');
-      var theme = stored || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-      document.documentElement.setAttribute('data-theme', theme);
-    } catch (e) {}
-  })();
+(function() {
+  try {
+    var stored = localStorage.getItem('theme');
+    var theme =
+      stored ||
+      (
+        window.matchMedia(
+          '(prefers-color-scheme: light)'
+        ).matches
+          ? 'light'
+          : 'dark'
+      );
+
+    document.documentElement.setAttribute(
+      'data-theme',
+      theme
+    );
+  } catch (e) {}
+})();
 `;
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      suppressHydrationWarning
+    >
       <head>
-        <script dangerouslySetInnerHTML={{ __html: noFlashScript }} />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: noFlashScript,
+          }}
+        />
       </head>
+
       <body className="min-h-screen">
-        <div className="max-w-2xl mx-auto px-6 py-12">
+        <div className="max-w-4xl mx-auto px-8 py-16">
           <Nav />
           {children}
         </div>

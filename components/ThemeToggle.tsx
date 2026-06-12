@@ -68,7 +68,7 @@ export default function ThemeToggle() {
       );
 
       setTheme(next);
-    }, 450);
+    },800);
 
     overlay.addEventListener(
       "animationend",
@@ -81,13 +81,13 @@ export default function ThemeToggle() {
   if (!mounted) {
     return (
       <div
-        className="w-8 h-8"
+        className="w-11 h-11 flex items-center justify-center rounded-full transition-all hover:scale-110 active:scale-95"
         aria-hidden="true"
       />
     );
   }
 
-  return (
+    return (
     <button
       onClick={toggleTheme}
       aria-label={`Switch to ${
@@ -95,17 +95,21 @@ export default function ThemeToggle() {
           ? "light"
           : "dark"
       } mode`}
-      className="w-8 h-8 flex items-center justify-center rounded-full transition-transform hover:scale-110 active:scale-95"
+      className="w-11 h-11 flex items-center justify-center rounded-full transition-all hover:scale-110 active:scale-95"
       style={{
-        border:
-          "1px solid var(--rule)",
-        color:
-          "var(--text)",
+        border: "1px solid var(--rule)",
+        color: "var(--text)",
+        background: "var(--surface)",
       }}
     >
-      {theme === "dark"
-        ? "☾"
-        : "☀"}
+      <span
+        style={{
+          fontSize: "1.1rem",
+          lineHeight: 1,
+        }}
+      >
+        {theme === "dark" ? "☾" : "☀"}
+      </span>
     </button>
   );
 }

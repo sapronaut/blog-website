@@ -127,7 +127,7 @@ box-shadow:
 
 .pen-transition.animate::before {
 animation:
-penSweep 900ms
+penSweep 2000ms
 cubic-bezier(.22,1,.36,1)
 forwards;
 }
