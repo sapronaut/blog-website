@@ -1,10 +1,14 @@
 import Link from "next/link";
-
+import Image from "next/image";
 const links = [
   {
     label: "GitHub",
     href: "https://github.com/sapronaut",
   },
+    {
+    label: "X",
+    href: "https://x.com/Sapronaut",
+  }
 ];
 
 export default function ProfilePage() {
@@ -12,16 +16,20 @@ export default function ProfilePage() {
     <main>
       <section className="flex flex-col items-start gap-8">
         <div
-          className="w-28 h-28 rounded-full overflow-hidden flex items-center justify-center text-4xl"
-          style={{
-            background: "var(--surface)",
-            border: "1px solid var(--rule)",
-          }}
-        >
-          <span style={{ color: "var(--text-dim)" }}>
-            S
-          </span>
-        </div>
+  className="w-48 h-48 rounded-full overflow-hidden"
+  style={{
+    border: "1px solid var(--rule)",
+  }}
+>
+  <Image
+    src="/avatar (2).jpg"
+    alt="Saptarshi"
+    width={192}
+    height={192}
+    className="w-full h-full object-cover"
+    priority
+  />
+</div>
 
         <div>
           <h1 className="text-4xl font-bold tracking-tight">
@@ -63,9 +71,7 @@ export default function ProfilePage() {
             </a>
           ))}
 
-          <Link href="/blog">
-            notes →
-          </Link>
+
         </div>
       </section>
     </main>

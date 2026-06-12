@@ -8,10 +8,10 @@ export default function Home() {
     <main>
       <header className="mb-12">
         <h1 className="text-xl font-semibold tracking-tight">
-          notes <span style={{ color: "var(--accent)" }}>//</span> saptarshi
+        <span style={{ color: "var(--accent)" }}>//</span> articles
         </h1>
         <p className="mt-2 text-sm" style={{ color: "var(--text-dim)" }}>
-          writings, research, things I&apos;m figuring out. mostly for me.
+          music and muse 
         </p>
       </header>
 

@@ -3,8 +3,21 @@ import ThemeToggle from "./ThemeToggle";
 
 export default function Nav() {
   return (
-    <nav className="flex items-center justify-between mb-20">
-      <div className="flex items-center gap-8 text-sm">
+    <nav
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: "80px",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          gap: "32px",
+          alignItems: "center",
+        }}
+      >
         <Link href="/">home</Link>
         <Link href="/blog">notes</Link>
       </div>
