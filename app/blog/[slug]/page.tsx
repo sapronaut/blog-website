@@ -26,8 +26,8 @@ export default async function PostPage({
         &larr; back to notes
       </Link>
 
-      <article className="mt-8">
-        <time className="block text-xs mb-2" style={{ color: "var(--text-dim)" }}>
+      <article className="mt-8 max-w-prose">
+        <time className="block text-xs mb-2" style={{ color: "var(--accent)" }}>
           {post!.date}
         </time>
         <h1 className="text-2xl font-semibold tracking-tight mb-6">

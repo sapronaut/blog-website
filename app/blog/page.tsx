@@ -24,18 +24,18 @@ export default function Home() {
           {posts.map((post) => (
             <li
               key={post.slug}
-              className="pb-6"
+              className="pb-6 group"
               style={{ borderBottom: "1px solid var(--rule)" }}
             >
               <time
                 className="block text-xs mb-1"
-                style={{ color: "var(--text-dim)" }}
+                style={{ color: "var(--accent)" }}
               >
                 {post.date}
               </time>
               <Link
                 href={`/blog/${post.slug}`}
-                className="text-base font-medium"
+                className="text-base font-medium transition-all inline-block group-hover:translate-x-1"
                 style={{ color: "var(--text)" }}
               >
                 {post.title}

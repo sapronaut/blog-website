@@ -1,14 +1,15 @@
-import Link from "next/link";
 import Image from "next/image";
+import { ArrowUpRight } from "lucide-react";
+
 const links = [
   {
     label: "GitHub",
     href: "https://github.com/sapronaut",
   },
-    {
+  {
     label: "X",
     href: "https://x.com/Sapronaut",
-  }
+  },
 ];
 
 export default function ProfilePage() {
@@ -16,7 +17,7 @@ export default function ProfilePage() {
     <main>
       <section className="flex flex-col items-start gap-5">
         <div
-  className="w-42 h-42 rounded-full overflow-hidden"
+  className="w-42 h-42 rounded-2x1 overflow-hidden"
   style={{
     border: "1px solid var(--rule)",
   }}
@@ -59,19 +60,23 @@ export default function ProfilePage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-4 text-sm">
+        <div className="flex items-center gap-3 text-sm">
           {links.map((link) => (
             <a
               key={link.href}
               href={link.href}
               target="_blank"
               rel="noopener noreferrer"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-colors"
+              style={{
+                border: "1px solid var(--rule)",
+                color: "var(--text)",
+              }}
             >
               {link.label}
+              <ArrowUpRight size={14} />
             </a>
           ))}
-
-
         </div>
       </section>
     </main>
