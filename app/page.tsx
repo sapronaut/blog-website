@@ -3,13 +3,17 @@ import { ArrowUpRight } from "lucide-react";
 
 const links = [
   {
-    label: "GitHub",
+    label: "github",
     href: "https://github.com/sapronaut",
   },
   {
-    label: "X",
+    label: "x",
     href: "https://x.com/Sapronaut",
   },
+    {
+    label: "duolingo",
+    href: "https://www.duolingo.com/profile/Sapronaut22",
+  }
 ];
 
 export default function ProfilePage() {
