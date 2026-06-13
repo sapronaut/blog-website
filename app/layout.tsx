@@ -49,9 +49,18 @@ export default function RootLayout({
       </head>
 
       <body className="min-h-screen">
-        <div className="max-w-4xl mx-auto px-8 py-16">
+        <div className="max-w-4xl mx-auto px-8 py-16 flex flex-col min-h-screen">
           <Nav />
-          {children}
+          <div className="flex-1">{children}</div>
+          <footer
+            className="mt-20 pt-6 text-xs"
+            style={{
+              borderTop: "1px solid var(--rule)",
+              color: "var(--text-dim)",
+            }}
+          >
+            built with next.js · sapronaut, {new Date().getFullYear()}
+          </footer>
         </div>
       </body>
     </html>
