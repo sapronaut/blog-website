@@ -14,9 +14,9 @@ const links = [
 export default function ProfilePage() {
   return (
     <main>
-      <section className="flex flex-col items-start gap-8">
+      <section className="flex flex-col items-start gap-5">
         <div
-  className="w-48 h-48 rounded-full overflow-hidden"
+  className="w-20 h-20 rounded-full overflow-hidden"
   style={{
     border: "1px solid var(--rule)",
   }}
@@ -24,20 +24,20 @@ export default function ProfilePage() {
   <Image
     src="/avatar (2).jpg"
     alt="Saptarshi"
-    width={192}
-    height={192}
+    width={80}
+    height={80}
     className="w-full h-full object-cover"
     priority
   />
 </div>
 
         <div>
-          <h1 className="text-4xl font-bold tracking-tight">
+          <h1 className="text-xl font-semibold tracking-tight">
             Saptarshi
           </h1>
 
           <p
-            className="mt-5 text-base leading-8 max-w-3xl"
+            className="mt-2 text-sm leading-relaxed"
             style={{
               color: "var(--text-dim)",
             }}
@@ -59,7 +59,7 @@ export default function ProfilePage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-8 text-sm">
+        <div className="flex items-center gap-4 text-sm">
           {links.map((link) => (
             <a
               key={link.href}
