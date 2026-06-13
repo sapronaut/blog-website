@@ -16,7 +16,7 @@ export default function ProfilePage() {
     <main>
       <section className="flex flex-col items-start gap-5">
         <div
-  className="w-20 h-20 rounded-full overflow-hidden"
+  className="w-42 h-42 rounded-full overflow-hidden"
   style={{
     border: "1px solid var(--rule)",
   }}
@@ -32,7 +32,7 @@ export default function ProfilePage() {
 </div>
 
         <div>
-          <h1 className="text-xl font-semibold tracking-tight">
+          <h1 className="text-x4 font-semibold tracking-tight">
             Saptarshi
           </h1>
 
