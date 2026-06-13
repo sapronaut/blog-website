@@ -17,7 +17,7 @@ export default function ProfilePage() {
     <main>
       <section className="flex flex-col items-start gap-5">
         <div
-  className="w-42 h-42 rounded-2x1 overflow-hidden"
+  className="w-42 h-42 rounded-full overflow-hidden"
   style={{
     border: "1px solid var(--rule)",
   }}
