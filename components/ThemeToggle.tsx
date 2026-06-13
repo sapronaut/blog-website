@@ -2,15 +2,20 @@
 
 import { useEffect, useState } from "react";
 
+const THEME_COLORS = {
+  light: "#f8f5ee",
+  dark: "#111315",
+};
+
+const DURATIONS = { slash: 750, shutter: 400 };
+const SWAP_AT = { slash: 430, shutter: 200 };
+
 export default function ThemeToggle() {
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const stored = localStorage.getItem("theme") as
-      | "dark"
-      | "light"
-      | null;
+    const stored = localStorage.getItem("theme") as "dark" | "light" | null;
 
     const initial =
       stored ||
@@ -18,64 +23,54 @@ export default function ThemeToggle() {
         ? "light"
         : "dark");
 
-    document.documentElement.setAttribute(
-      "data-theme",
-      initial
-    );
-
+    document.documentElement.setAttribute("data-theme", initial);
     setTheme(initial);
     setMounted(true);
   }, []);
 
   const toggleTheme = () => {
-    const next =
-      theme === "dark"
-        ? "light"
-        : "dark";
+    const next = theme === "dark" ? "light" : "dark";
 
-    const overlay =
-      document.createElement("div");
+    // alternate between slash and shutter on each click
+    const countRaw = localStorage.getItem("theme-transition-count");
+    const count = countRaw ? parseInt(countRaw, 10) : 0;
+    const mode: "slash" | "shutter" = count % 2 === 0 ? "slash" : "shutter";
+    localStorage.setItem("theme-transition-count", String(count + 1));
 
-    overlay.className =
-      "pen-transition";
+    const overlay = document.createElement("div");
+    overlay.style.setProperty("--theme-color", THEME_COLORS[next]);
 
-    overlay.style.setProperty(
-      "--pen-color",
-      next === "light"
-        ? "#f8f5ee"
-        : "#111315"
-    );
+    if (mode === "slash") {
+      overlay.className = "slash-overlay";
+      overlay.innerHTML = `
+        <div class="slash-wipe"></div>
+        <div class="slash-glow"></div>
+        <div class="slash-blade"></div>
+      `;
+    } else {
+      overlay.className = "shutter-overlay";
+      overlay.innerHTML = `
+        <div class="shutter-left"></div>
+        <div class="shutter-right"></div>
+        <div class="shutter-pow">POW!</div>
+      `;
+    }
 
-    document.body.appendChild(
-      overlay
-    );
+    document.body.appendChild(overlay);
 
     requestAnimationFrame(() => {
-      overlay.classList.add(
-        "animate"
-      );
+      overlay.classList.add("animate");
     });
 
     setTimeout(() => {
-      document.documentElement.setAttribute(
-        "data-theme",
-        next
-      );
-
-      localStorage.setItem(
-        "theme",
-        next
-      );
-
+      document.documentElement.setAttribute("data-theme", next);
+      localStorage.setItem("theme", next);
       setTheme(next);
-    },800);
+    }, SWAP_AT[mode]);
 
-    overlay.addEventListener(
-      "animationend",
-      () => {
-        overlay.remove();
-      }
-    );
+    setTimeout(() => {
+      overlay.remove();
+    }, DURATIONS[mode] + 100);
   };
 
   if (!mounted) {
@@ -87,14 +82,10 @@ export default function ThemeToggle() {
     );
   }
 
-    return (
+  return (
     <button
       onClick={toggleTheme}
-      aria-label={`Switch to ${
-        theme === "dark"
-          ? "light"
-          : "dark"
-      } mode`}
+      aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
       className="w-11 h-11 flex items-center justify-center rounded-full transition-all hover:scale-110 active:scale-95"
       style={{
         border: "1px solid var(--rule)",
@@ -102,12 +93,7 @@ export default function ThemeToggle() {
         background: "var(--surface)",
       }}
     >
-      <span
-        style={{
-          fontSize: "1.1rem",
-          lineHeight: 1,
-        }}
-      >
+      <span style={{ fontSize: "1.1rem", lineHeight: 1 }}>
         {theme === "dark" ? "☾" : "☀"}
       </span>
     </button>
