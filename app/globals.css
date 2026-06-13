@@ -225,6 +225,10 @@ animation-delay: 0.25s;
 100% { transform: translate(-50%,-50%) scale(1) rotate(0deg); opacity: 0; }
 }
 
+.prose-content {
+font-size: 0.9rem;
+}
+
 .prose-content h1,
 .prose-content h2,
 .prose-content h3 {
