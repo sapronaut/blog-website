@@ -1,5 +1,5 @@
 ---
-title: "platonic?"
+title: "unrequited?"
 date: "2026-06-12"
 ---
 
