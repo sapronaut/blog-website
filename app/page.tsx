@@ -32,7 +32,7 @@ export default function ProfilePage() {
 </div>
 
         <div>
-          <h1 className="text-x4 font-semibold tracking-tight">
+          <h1 className="text-2xl font-semibold tracking-tight">
             Saptarshi
           </h1>
 
