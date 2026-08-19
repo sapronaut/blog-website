@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What is done in love</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=EB+Garamond:ital@0;1&display=swap');
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #0c0f1a;
+    color: #ece6da;
+    font-family: 'EB Garamond', serif;
+    overflow-x: hidden;
+  }
+
+  #bg-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse at 20% 15%, rgba(70,60,110,0.35), transparent 55%),
+      radial-gradient(ellipse at 80% 70%, rgba(40,70,90,0.3), transparent 55%),
+      linear-gradient(180deg, #0a0d17 0%, #10142370 40%, #14101c 100%);
+    pointer-events: none;
+  }
+
+  .stars {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .star {
+    position: absolute;
+    background: #f3ecd8;
+    border-radius: 50%;
+    opacity: 0.5;
+    animation: twinkle 4s ease-in-out infinite;
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 0.85; }
+  }
+
+  .stem-track {
+    position: fixed;
+    left: 50%;
+    bottom: 0;
+    top: 0;
+    width: 2px;
+    transform: translateX(-50%);
+    z-index: 1;
+    pointer-events: none;
+  }
+  .stem-line {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 2px;
+    height: 0%;
+    background: linear-gradient(180deg, #6b8f5a, #3d5a34);
+    transition: height 0.08s linear, background 2.5s ease, box-shadow 2.5s ease;
+    box-shadow: 0 0 6px rgba(107,143,90,0.4);
+  }
+  .stem-line.wilting {
+    background: linear-gradient(180deg, #8a6a45, #4a3420);
+    box-shadow: 0 0 6px rgba(120,80,40,0.25);
+  }
+
+  .leaf {
+    position: absolute;
+    width: 26px;
+    height: 14px;
+    background: #4f7a45;
+    border-radius: 0 100% 0 100%;
+    opacity: 0;
+    transform: scale(0);
+    transition: opacity 0.6s ease, transform 1.4s ease, background 2.5s ease;
+  }
+  .leaf.show { opacity: 0.55; transform: scale(1); }
+  .leaf.left { left: -24px; transform-origin: right center; }
+  .leaf.left.show { transform: scale(1) rotate(20deg); }
+  .leaf.right { left: 2px; transform-origin: left center; border-radius: 100% 0 100% 0; }
+  .leaf.right.show { transform: scale(1) rotate(-20deg); }
+  .leaf.wilting { background: #7a5a34; opacity: 0.4; }
+  .leaf.left.wilting { transform: scale(0.9) rotate(55deg); }
+  .leaf.right.wilting { transform: scale(0.9) rotate(-55deg); }
+
+  .bloom {
+    position: fixed;
+    left: 50%;
+    z-index: 1;
+    transform: translate(-50%, 50%) scale(0);
+    opacity: 0;
+    transition: transform 1.1s cubic-bezier(.2,.9,.3,1), opacity 1.1s ease;
+    pointer-events: none;
+  }
+  .bloom.show { transform: translate(-50%, 50%) scale(1); opacity: 0.9; }
+  .bloom.wilting.show { transform: translate(-50%, 55%) scale(0.85) rotate(12deg); opacity: 0.55; }
+  .bloom svg { width: 90px; height: 90px; filter: drop-shadow(0 0 10px rgba(180,90,110,0.25)); transition: filter 2.5s ease; }
+  .bloom.wilting svg { filter: drop-shadow(0 0 6px rgba(90,60,30,0.2)) saturate(0.4) brightness(0.75); }
+  .bloom, .bloom.wilting.show { transition: transform 2s ease, opacity 2s ease; }
+
+  main {
+    position: relative;
+    z-index: 2;
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 20vh 8vw 30vh;
+  }
+
+  .frame-top {
+    height: 18vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .title {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(28px, 5vw, 44px);
+    letter-spacing: 0.02em;
+    color: #f1e9d8;
+    text-align: center;
+    line-height: 1.3;
+  }
+  .attribution {
+    margin-top: 14px;
+    font-size: 15px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #9c8f74;
+  }
+
+  .verse {
+    font-family: 'EB Garamond', serif;
+    font-size: clamp(18px, 2.3vw, 22px);
+    line-height: 2;
+    color: #cfc6b3;
+    opacity: 0.15;
+    transform: translateY(24px);
+    transition: opacity 1s ease, transform 1s ease, color 1s ease;
+    margin: 0 0 3.2em;
+  }
+  .verse.visible {
+    opacity: 0.97;
+    transform: translateY(0);
+    color: #ece2cc;
+  }
+  .verse.dim {
+    opacity: 0.35;
+    color: #a89a7c;
+  }
+
+  .verse em {
+    font-style: italic;
+    color: #d9a5b2;
+  }
+
+  .closing {
+    text-align: center;
+    padding-top: 10vh;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(20px, 3vw, 26px);
+    color: #b79fae;
+    opacity: 0.15;
+    transform: translateY(24px);
+    transition: opacity 1.2s ease, transform 1.2s ease;
+  }
+  .closing.visible { opacity: 1; transform: translateY(0); }
+
+  .fade-floor {
+    height: 22vh;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .verse, .closing, .bloom, .leaf, .stem-line { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div id="bg-canvas"></div>
+<div class="stars" id="stars"></div>
+<div class="stem-track"><div class="stem-line" id="stemLine"></div></div>
+<div id="leafLayer"></div>
+<div id="bloomLayer"></div>
+
+<div class="frame-top">
+  <div>
+    <div class="title">"What is done in love<br>is done well"</div>
+    <div class="attribution">— Vincent van Gogh</div>
+  </div>
+</div>
+
+<main id="content">
+
+<p class="verse">I hate it when this is called hopeless love. But when I love, I let them have it all. I love love.</p>
+
+<p class="verse">Whatever is done in love cannot be wrong in God's court. I do that — do whatever, in love. It's my shield.</p>
+
+<p class="verse">It's reckless. It's messy. Isn't that what makes us human, after all — that we want to be reckless, be messy, be however our hearts tell us when we are with our love?</p>
+
+<p class="verse">If I were acting from obligation, I know exactly what I would look like — I would move quickly, cut every corner, glance at my watch as though the minutes owed me something. That is obligation's face: hurried, resentful, already halfway out the door.</p>
+
+<p class="verse">But you, <em>my love</em> — for you I would not mind if the sun rose twice, if time itself grew confused and doubled back only to give me a few more hours in your company.</p>
+
+<p class="verse">I would have stood at every shy corner of every street just to catch the side of your face glowing in that particular way it glows — the way I have only ever seen the moon glow, looked up at from beneath the shade of a tree, half-hidden, half-afraid to be caught looking, wholly unable to look away.</p>
+
+<p class="verse">Perhaps I am not enough. Perhaps I could never say the words in the order that would make you believe in a love this large. But I would have loved you anyway, in my own clumsy, unpolished way — the only way I know.</p>
+
+<p class="verse">I would have left you signs. Small ones. Tucked into corners only we would understand — inside jokes buried like little relics of a country only two people ever lived in.</p>
+
+<p class="verse">I would have wanted you, someday, passing by the place that was ours, to feel something catch in your chest and think of me — though I don't think you would. I think you would walk past it and feel nothing at all, and that not-feeling would be its own quiet tragedy, one you would never even know you were living.</p>
+
+<p class="verse">Do you know I love your laugh — the one you yourself call <em>weird</em>? I could not disagree more. When you laugh like that in front of me, unguarded, unbeautiful in the way only true things are, I feel something close to honored. You are not performing the person your hardships trained you to be. You are simply, helplessly yourself. And I have come to believe that this — this small, unrepeatable glimpse of a person before the world got its hands on them — is the closest thing to holy I will ever be permitted to witness.</p>
+
+<p class="verse">A weak man protects himself first and loves only what remains after the protecting is done — a scrap, a leftover, a love filed down so nothing sharp can reach him. I have never managed that arithmetic. When I love, I love with the whole trembling weight of myself. If that is foolishness, let me be a fool a thousand times over rather than a careful man who dies having never once been undone by anyone.</p>
+
+<p class="verse">There are nights I lie awake turning this over — why love that asks for nothing is called hopeless, while love that calculates its return is called wise. I cannot make peace with that ranking. I think mine is the braver kind: the one that walks forward without a map, without a guarantee, without even the certainty of being seen.</p>
+
+<p class="verse">You may never read the signs I left in our corners. You may pass the place that was ours a hundred times and feel only the ordinary weather of an ordinary day. And still I would do it all again — every reckless, unreturned gesture of it — because the doing was never really about you knowing. It was about the love being real while it lasted. Done fully. Done foolishly. And therefore, by his old reckoning, done well.</p>
+
+<div class="closing" id="closing">what is done in love<br>is done well.</div>
+
+<div class="fade-floor"></div>
+</main>
+
+<script>
+  const starsContainer = document.getElementById('stars');
+  const starCount = 70;
+  for (let i = 0; i < starCount; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 2 + 0.6;
+    s.style.width = size + 'px';
+    s.style.height = size + 'px';
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 100 + '%';
+    s.style.animationDelay = (Math.random() * 4) + 's';
+    s.style.animationDuration = (3 + Math.random() * 3) + 's';
+    starsContainer.appendChild(s);
+  }
+
+  const verses = Array.from(document.querySelectorAll('.verse'));
+  const closing = document.getElementById('closing');
+  const stemLine = document.getElementById('stemLine');
+  const leafLayer = document.getElementById('leafLayer');
+  const bloomLayer = document.getElementById('bloomLayer');
+
+  const petalColors = ['#c9647c', '#d98a97', '#b8546b', '#e0a1ab'];
+
+  function makeBloom(index, topPercent) {
+    const div = document.createElement('div');
+    div.className = 'bloom';
+    div.style.top = topPercent + 'vh';
+    const color = petalColors[index % petalColors.length];
+    div.innerHTML = `
+      <svg viewBox="0 0 100 100">
+        <g>
+          ${[0,60,120,180,240,300].map(rot => `
+            <ellipse cx="50" cy="30" rx="12" ry="20" fill="${color}" opacity="0.85"
+              transform="rotate(${rot} 50 50)"/>
+          `).join('')}
+          <circle cx="50" cy="50" r="8" fill="#e8c765" opacity="0.9"/>
+        </g>
+      </svg>`;
+    bloomLayer.appendChild(div);
+    return div;
+  }
+
+  const leafPositions = [12, 30, 48, 66, 84];
+  const leaves = leafPositions.map((pct, i) => {
+    const l = document.createElement('div');
+    l.className = 'leaf ' + (i % 2 === 0 ? 'left' : 'right');
+    l.style.bottom = pct + '%';
+    document.querySelector('.stem-track').appendChild(l);
+    return l;
+  });
+
+  const bloomVerses = [3, 6, 9, 11];
+  const blooms = bloomVerses.map((vIdx, i) => {
+    const el = verses[vIdx];
+    return { el, node: makeBloom(i, 0) };
+  });
+
+  function onScroll() {
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop;
+    const scrollHeight = doc.scrollHeight - doc.clientHeight;
+    const progress = Math.min(1, Math.max(0, scrollTop / scrollHeight));
+
+    stemLine.style.height = (progress * 100) + '%';
+
+    const wiltStart = 0.68;
+    const isWilting = progress >= wiltStart;
+    stemLine.classList.toggle('wilting', isWilting);
+
+    leaves.forEach((l, i) => {
+      const threshold = leafPositions[i] / 100;
+      if (progress >= threshold * 0.95) l.classList.add('show');
+      l.classList.toggle('wilting', isWilting);
+    });
+
+    const viewportCenter = window.innerHeight * 0.6;
+
+    verses.forEach(v => {
+      const rect = v.getBoundingClientRect();
+      const dist = rect.top - viewportCenter;
+      if (rect.top < window.innerHeight * 0.75 && rect.bottom > window.innerHeight * 0.1) {
+        v.classList.add('visible');
+        v.classList.remove('dim');
+      } else if (rect.top >= window.innerHeight * 0.75) {
+        v.classList.remove('visible');
+      } else {
+        v.classList.add('dim');
+      }
+    });
+
+    blooms.forEach(b => {
+      const rect = b.el.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.7) {
+        const stemPct = Math.min(96, Math.max(4,
+          ((rect.top + rect.height / 2) / window.innerHeight) * 60 + 15
+        ));
+        b.node.style.top = stemPct + 'vh';
+        b.node.classList.add('show');
+      }
+      b.node.classList.toggle('wilting', isWilting);
+    });
+
+    const closingRect = closing.getBoundingClientRect();
+    if (closingRect.top < window.innerHeight * 0.75) {
+      closing.classList.add('visible');
+    }
+  }
+
+  document.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  onScroll();
+</script>
+
+</body>
+</html>
