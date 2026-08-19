@@ -34,10 +34,10 @@ export default function Home() {
                 {post.date}
               </time>
               <Link
-                href={`/blog/${post.slug}`}
-                className="text-base font-medium transition-all inline-block group-hover:translate-x-1"
-                style={{ color: "var(--text)" }}
-              >
+  href={post.external || `/blog/${post.slug}`}
+  className="text-base font-medium transition-all inline-block group-hover:translate-x-1"
+  style={{ color: "var(--text)" }}
+>
                 {post.title}
               </Link>
             </li>
